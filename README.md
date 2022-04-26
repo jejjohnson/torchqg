@@ -1,7 +1,7 @@
 Torch QG
 === 
 
-![Example](https://github.com/hrkz/torchqg/blob/master/media/geo_dns.png)
+![Example](./media/geo_dns.png)
 
 torchgq is a **differentiable** single-layer quasi-geostrophic PDE solver implemented using [PyTorch](https://pytorch.org/). The numerical method used is a pseudo-spectral domain decomposition which allows for idealized geometries (only doubly-periodic ones are supported for now). 
 
@@ -13,3 +13,18 @@ See `main.py` in the root folder for a simulation example based on [Graham et al
 
 The code was initially developped for subgrid-scale (SGS) parametrization learning, in particular with an end-to-end approach, i.e. where gradient of the forward solver is available. The first reference describing the setup can be accessed [here](https://arxiv.org/pdf/2111.06841.pdf).
 
+
+## Demo
+
+**Stream Function**
+
+![Stream](./media/movie_p_slow.gif)
+
+
+**Gradient**
+
+![StreamGradient](./media/movie_dp_slow.gif)
+
+**Gradient (2nd Order)**
+
+![Stream2ndGradient](./media/movie_dp2_slow.gif)
