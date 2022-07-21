@@ -1,7 +1,6 @@
 import math
 import tqdm
 
-import h5py
 
 import torch
 import torch.fft
@@ -298,11 +297,13 @@ class QgModel:
 
   # Data
   def save(self, name):
+    import h5py
     hf = h5py.File(name, 'w')
     hf.create_dataset('q', data=to_physical(self.p_.sol).cpu().detach())
     hf.close()
 
   def load(self, name):
+    import h5py
     hf = h5py.File(name, 'r')
     fq = hf.get('q')
     sq = to_spectral(torch.from_numpy(fq[:]).to(device))
