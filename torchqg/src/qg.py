@@ -13,6 +13,7 @@ from .timestepper import ForwardEuler, RungeKutta2, RungeKutta4
 from .pde import Pde, Eq
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# device = torch.device("mps")
 print('device =', device)
 
 def to_spectral(y): return torch.fft. rfftn(y, norm='forward')

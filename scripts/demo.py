@@ -61,18 +61,18 @@ def Fs(i, sol, dt, t, grid):
 # PARAMETERS
 #######################
 
-domain_factor = 1
+domain_factor = 1.2
 
 Lx = 2 * math.pi * domain_factor
 Ly = 2 * math.pi * domain_factor
-Nx = 512
-Ny = 512
+Nx = 512 * domain_factor
+Ny = 512 * domain_factor
 scale = 4
 Nxl = int(Nx / scale)
 Nyl = int(Ny / scale)
 
 iters = 10_000
-steps = 1_500
+steps = 1_000
 
 t0=0.0
 dt = 480 / t_unit() # 480s
@@ -240,6 +240,7 @@ with torch.no_grad():
           visitor_dns(m, m.pde.cur, it / scale)
 
 
+print(dns.shape, np.arange(-Lx/2, Lx/2, Lx/Nx).shape, np.arange(steps).shape)
 
 ds_grid = xr.Dataset(
     {
@@ -285,5 +286,5 @@ ds_grid.attrs["y_minmax"] = Ly
 ds_grid.attrs["step_size"] = Lx/Nx
 
 
-save_path = root.joinpath("data/cutout_res.nc")
+save_path = root.joinpath("data/full_res.nc")
 ds_grid.to_zarr(save_path, mode="w")
