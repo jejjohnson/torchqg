@@ -61,7 +61,7 @@ def Fs(i, sol, dt, t, grid):
 # PARAMETERS
 #######################
 
-domain_factor = 1.2
+domain_factor = 1
 
 Lx = 2 * math.pi * domain_factor
 Ly = 2 * math.pi * domain_factor
@@ -286,5 +286,5 @@ ds_grid.attrs["y_minmax"] = Ly
 ds_grid.attrs["step_size"] = Lx/Nx
 
 
-save_path = root.joinpath("data/full_res.nc")
+save_path = root.joinpath("data/lo_res.nc")
 ds_grid.to_zarr(save_path, mode="w")
