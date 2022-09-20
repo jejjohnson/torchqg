@@ -65,8 +65,8 @@ domain_factor = 1
 
 Lx = 2 * math.pi * domain_factor
 Ly = 2 * math.pi * domain_factor
-Nx = 512 * domain_factor
-Ny = 512 * domain_factor
+Nx = 256 * domain_factor
+Ny = 256 * domain_factor
 scale = 4
 Nxl = int(Nx / scale)
 Nyl = int(Ny / scale)
@@ -76,6 +76,7 @@ steps = 1_000
 
 t0=0.0
 dt = 480 / t_unit() # 480s
+save_name = "forcing"
 B=0.0    # Planetary vorticity y-gradient
 mu = 1.25e-8 / l_unit()**(-1) # Linear drag, 1.25e-8m^-1
 nu = 352 / l_unit()**2 / t_unit()**(-1) # Viscosity coefficient, 22m^2s^-1 for the simulation (2048^2)
@@ -286,5 +287,5 @@ ds_grid.attrs["y_minmax"] = Ly
 ds_grid.attrs["step_size"] = Lx/Nx
 
 
-save_path = root.joinpath("data/lo_res.nc")
+save_path = root.joinpath(f"data/qgsim_{save_name}_{Nx}x{Ny}.nc")
 ds_grid.to_zarr(save_path, mode="w")
