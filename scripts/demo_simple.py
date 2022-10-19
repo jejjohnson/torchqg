@@ -40,21 +40,24 @@ def t_unit():
 def l_unit():
   return (504e4 / math.pi)
 
-# def Fs(i, sol, dt, t, grid):
-#     phi_x = math.pi * math.sin(1.2e-6 / t_unit()**(-1) * t)
-#     phi_y = math.pi * math.sin(1.2e-6 * math.pi / t_unit()**(-1) * t / 3)
-#     y = torch.cos(4 * grid.y + phi_y).view(grid.Ny, 1) - torch.cos(4 * grid.x + phi_x).view(1, grid.Nx)
+f_constant = 50.0
 
-#     yh = to_spectral(y)
-#     K = torch.sqrt(grid.krsq)
-#     yh[K < 3.0] = 0
-#     yh[K > 5.0] = 0
-#     yh[0, 0] = 0
+def Fs(i, sol, dt, t, grid):
+    phi_x = math.pi * math.sin(1.2e-6 / t_unit()**(-1) * t)
+    phi_y = math.pi * math.sin(1.2e-6 * math.pi / t_unit()**(-1) * t / 3)
+    y = torch.cos(4 * grid.y + phi_y).view(grid.Ny, 1) - torch.cos(4 * grid.x + phi_x).view(1, grid.Nx)
 
-#     e0 = 1.75e-18 / t_unit()**(-3)
-#     ei = 0.5 * grid.int_sq(yh) / (grid.Lx * grid.Ly)
-#     yh *= torch.sqrt(e0 / ei)
-#     return yh
+    yh = to_spectral(y)
+    K = torch.sqrt(grid.krsq)
+    yh[K < 3.0] = 0
+    yh[K > 5.0] = 0
+    yh[0, 0] = 0
+
+    e0 = 1.75e-18 / t_unit()**(-3)
+    ei = 0.5 * grid.int_sq(yh) / (grid.Lx * grid.Ly)
+    yh *= torch.sqrt(e0 / ei)
+    yh = f_constant * torch.ones_like(yh)
+    return yh
 
 
 #######################
@@ -65,8 +68,8 @@ domain_factor = 1
 
 Lx = 2 * math.pi * domain_factor
 Ly = 2 * math.pi * domain_factor
-Nx = 512 * domain_factor
-Ny = 512 * domain_factor
+Nx = 128 * domain_factor
+Ny = 128 * domain_factor
 scale = 4
 Nxl = int(Nx / scale)
 Nyl = int(Ny / scale)
@@ -123,6 +126,7 @@ ds_grid.attrs["x_minmax"] = Lx
 ds_grid.attrs["y_minmax"] = Ly
 ds_grid.attrs["step_size"] = Lx/Nx
 ds_grid.attrs["step_size_l"] = Lx/Nxl
+ds_grid.attrs["f_constant"] = f_constant
 
 # High res model.
 h = QgModel(
@@ -289,3 +293,6 @@ ds_grid.attrs["step_size"] = Lx/Nx
 
 save_path = root.joinpath(f"data/qgsim_{save_name}_{Nx}x{Ny}.zarr")
 ds_grid.to_zarr(save_path, mode="w")
+
+save_path = root.joinpath(f"data/qgsim_{save_name}_{Nx}x{Ny}.nc")
+ds_grid.to_netcdf(save_path, mode="w")

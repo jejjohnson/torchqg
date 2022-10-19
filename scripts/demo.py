@@ -65,8 +65,8 @@ domain_factor = 1
 
 Lx = 2 * math.pi * domain_factor
 Ly = 2 * math.pi * domain_factor
-Nx = 256 * domain_factor
-Ny = 256 * domain_factor
+Nx = 128 * domain_factor
+Ny = 128 * domain_factor
 scale = 4
 Nxl = int(Nx / scale)
 Nyl = int(Ny / scale)
@@ -287,5 +287,8 @@ ds_grid.attrs["y_minmax"] = Ly
 ds_grid.attrs["step_size"] = Lx/Nx
 
 
-save_path = root.joinpath(f"data/qgsim_{save_name}_{Nx}x{Ny}.nc")
+save_path = root.joinpath(f"data/qgsim_{save_name}_{Nx}x{Ny}.zarr")
 ds_grid.to_zarr(save_path, mode="w")
+
+save_path = root.joinpath(f"data/qgsim_{save_name}_{Nx}x{Ny}.nc")
+ds_grid.to_netcdf(save_path, mode="w")
